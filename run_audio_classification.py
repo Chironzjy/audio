@@ -363,6 +363,7 @@ def main():
 
     # Training
     if training_args.do_train:
+        print("Trained!")
         checkpoint = None
         if training_args.resume_from_checkpoint is not None:
             checkpoint = training_args.resume_from_checkpoint
@@ -376,9 +377,11 @@ def main():
 
     # Evaluation
     if training_args.do_eval:
+        print("Evaluated!")
         metrics = trainer.evaluate()
         trainer.log_metrics("eval", metrics)
         trainer.save_metrics("eval", metrics)
+        print(metrics)
 
     # Write model card and (optionally) push to hub
     kwargs = {
@@ -387,10 +390,10 @@ def main():
         "dataset": data_args.dataset_name,
         "tags": ["audio-classification"],
     }
-    if training_args.push_to_hub:
-        trainer.push_to_hub(**kwargs)
-    else:
-        trainer.create_model_card(**kwargs)
+    # if training_args.push_to_hub:
+    #     trainer.push_to_hub(**kwargs)
+    # else:
+    trainer.create_model_card(**kwargs)
 
 
 if __name__ == "__main__":
