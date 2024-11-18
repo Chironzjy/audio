@@ -242,6 +242,7 @@ def main():
 
     # Initialize our dataset and prepare it for the audio classification task.
     raw_datasets = DatasetDict()
+    print(data_args.dataset_name)
     raw_datasets["train"] = load_dataset(
         data_args.dataset_name,
         data_args.dataset_config_name,
