@@ -294,6 +294,9 @@ def main():
 
     # Prepare label mappings.
     # We'll include these in the model's config to get human readable labels in the Inference API.
+    print(data_args.label_column_name)
+    print(raw_datasets["train"].features)
+    print(raw_datasets["train"].features[data_args.label_column_name])
     labels = raw_datasets["train"].features[data_args.label_column_name].names
     label2id, id2label = dict(), dict()
     for i, label in enumerate(labels):
