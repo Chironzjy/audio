@@ -262,14 +262,7 @@ def main():
 
     # Setting `return_attention_mask=True` is the way to get a correctly masked mean-pooling over
     # transformer outputs in the classifier, but it doesn't always lead to better accuracy
-    print(model_args.feature_extractor_name or model_args.model_name_or_path)
-    feature_extractor = AutoFeatureExtractor.from_pretrained(
-        model_args.feature_extractor_name or model_args.model_name_or_path,
-        return_attention_mask=model_args.attention_mask,
-        cache_dir=model_args.cache_dir,
-        revision=model_args.model_revision,
-        use_auth_token=True if model_args.use_auth_token else None,
-    )
+    feature_extractor = AutoFeatureExtractor.from_pretrained("microsoft/wavlm-base-plus")
 
     # `datasets` takes care of automatically loading and resampling the audio,
     # so we just need to set the correct target sampling rate.
