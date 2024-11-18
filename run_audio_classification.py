@@ -244,6 +244,7 @@ def main():
     raw_datasets = DatasetDict()
     raw_datasets["train"] = load_dataset("chironzjy/audiotrain")["train"]
     raw_datasets["eval"] = load_dataset("chironzjy/audiotest")["train"]
+    print(raw_datasets)
 
     if data_args.audio_column_name not in raw_datasets["train"].column_names:
         raise ValueError(
