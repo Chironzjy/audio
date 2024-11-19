@@ -343,9 +343,9 @@ def main():
         )
     # Set the training transforms
     raw_datasets["train"].set_transform(train_transforms, output_all_columns=False)
-    print(raw_datasets)
-    print(raw_datasets["train"])
-    print(raw_datasets["train"][0])
+    print("4:", raw_datasets)
+    print("5:", raw_datasets["train"])
+    print("6:", raw_datasets["train"][0])
 
     if data_args.max_eval_samples is not None:
         raw_datasets["eval"] = (
