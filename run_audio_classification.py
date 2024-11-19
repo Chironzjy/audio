@@ -273,6 +273,9 @@ def main():
     def train_transforms(batch):
         """Apply train_transforms across a batch."""
         output_batch = {"input_values": []}
+        print(batch)
+        print(data_args.audio_column_name)
+        print(batch[data_args.audio_column_name])
         for audio in batch[data_args.audio_column_name]:
             wav = random_subsample(
                 audio["array"], max_length=data_args.max_length_seconds, sample_rate=feature_extractor.sampling_rate
@@ -360,12 +363,12 @@ def main():
 
     # Training
     print("Trained!")
-    # checkpoint = None
-    # if training_args.resume_from_checkpoint is not None:
-    #     checkpoint = training_args.resume_from_checkpoint
-    # elif last_checkpoint is not None:
-    #     checkpoint = last_checkpoint
-    train_result = trainer.train()
+    checkpoint = None
+    if training_args.resume_from_checkpoint is not None:
+        checkpoint = training_args.resume_from_checkpoint
+    elif last_checkpoint is not None:
+        checkpoint = last_checkpoint
+    train_result = trainer.train(resume_from_checkpoint=checkpoint)
     trainer.save_model()
     trainer.log_metrics("train", train_result.metrics)
     trainer.save_metrics("train", train_result.metrics)
