@@ -342,6 +342,9 @@ def main():
             raw_datasets["train"].shuffle(seed=training_args.seed).select(range(data_args.max_train_samples))
         )
     # Set the training transforms
+    print(raw_datasets)
+    print(raw_datasets["train"])
+    print(raw_datasets["train"][0])
     raw_datasets["train"].set_transform(train_transforms, output_all_columns=False)
 
     if data_args.max_eval_samples is not None:
