@@ -341,18 +341,18 @@ def main():
     #     raw_datasets["train"] = (
     #         raw_datasets["train"].shuffle(seed=training_args.seed).select(range(data_args.max_train_samples))
     #     )
-    # Set the training transforms
-    raw_datasets["train"].set_transform(train_transforms, output_all_columns=False)
-    print("4:", raw_datasets)
-    print("5:", raw_datasets["train"])
-    print("6:", raw_datasets["train"][0])
+    # # Set the training transforms
+    # raw_datasets["train"].set_transform(train_transforms, output_all_columns=False)
+    # print("4:", raw_datasets)
+    # print("5:", raw_datasets["train"])
+    # print("6:", raw_datasets["train"][0])
 
     # if data_args.max_eval_samples is not None:
     #     raw_datasets["eval"] = (
     #         raw_datasets["eval"].shuffle(seed=training_args.seed).select(range(data_args.max_eval_samples))
     #     )
-    # Set the validation transforms
-    raw_datasets["eval"].set_transform(val_transforms, output_all_columns=False)
+    # # Set the validation transforms
+    # raw_datasets["eval"].set_transform(val_transforms, output_all_columns=False)
 
     # Initialize our trainer
     trainer = Trainer(
