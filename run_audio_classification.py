@@ -273,9 +273,9 @@ def main():
     def train_transforms(batch):
         """Apply train_transforms across a batch."""
         output_batch = {"input_values": []}
-        print("1:", batch)
-        print("2:", data_args.audio_column_name)
-        print("3:", batch[data_args.audio_column_name])
+        # print("1:", batch)
+        # print("2:", data_args.audio_column_name)
+        # print("3:", batch[data_args.audio_column_name])
         for audio in batch[data_args.audio_column_name]:
             wav = random_subsample(
                 audio["array"], max_length=data_args.max_length_seconds, sample_rate=feature_extractor.sampling_rate
@@ -354,6 +354,13 @@ def main():
     # # Set the validation transforms
     # raw_datasets["eval"].set_transform(val_transforms, output_all_columns=False)
 
+    raw_datasets["train"] = raw_datasets.map(train_transforms, remove_columns = "audio", batched = True)
+    print(raw_datasets["train"])
+    print(raw_datasets["train"][0])
+    raw_datasets["eval"] = raw_datasets.map(train_transforms, remove_columns = "audio", batched = True)    
+    print(raw_datasets["train"])
+    print(raw_datasets["train"][0])
+    
     # Initialize our trainer
     trainer = Trainer(
         model=model,
