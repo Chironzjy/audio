@@ -354,13 +354,13 @@ def main():
     # # Set the validation transforms
     # raw_datasets["eval"].set_transform(val_transforms, output_all_columns=False)
 
-    raw_datasets["train"] = raw_datasets.map(train_transforms, remove_columns = "audio", batched = True)
+    raw_datasets["train"] = raw_datasets["train"].map(train_transforms, remove_columns = "audio", batched = True)
     print(raw_datasets["train"])
     print(raw_datasets["train"][0])
-    raw_datasets["eval"] = raw_datasets.map(train_transforms, remove_columns = "audio", batched = True)    
-    print(raw_datasets["train"])
-    print(raw_datasets["train"][0])
-    
+    raw_datasets["eval"] = raw_datasets["eval"].map(train_transforms, remove_columns = "audio", batched = True)    
+    print(raw_datasets["eval"])
+    print(raw_datasets["eval"][0])
+
     # Initialize our trainer
     trainer = Trainer(
         model=model,
