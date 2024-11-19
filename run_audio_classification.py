@@ -294,7 +294,6 @@ def main():
 
     # Prepare label mappings.
     # We'll include these in the model's config to get human readable labels in the Inference API.
-    print(raw_datasets["train"].features[data_args.label_column_name].names)
     labels = raw_datasets["train"].features[data_args.label_column_name].names
     label2id, id2label = dict(), dict()
     for i, label in enumerate(labels):
@@ -335,53 +334,49 @@ def main():
     if model_args.freeze_feature_encoder:
         model.freeze_feature_encoder()
 
-    if training_args.do_train:
-        if data_args.max_train_samples is not None:
-            raw_datasets["train"] = (
-                raw_datasets["train"].shuffle(seed=training_args.seed).select(range(data_args.max_train_samples))
-            )
-        # Set the training transforms
-        raw_datasets["train"].set_transform(train_transforms, output_all_columns=False)
+    if data_args.max_train_samples is not None:
+        raw_datasets["train"] = (
+            raw_datasets["train"].shuffle(seed=training_args.seed).select(range(data_args.max_train_samples))
+        )
+    # Set the training transforms
+    raw_datasets["train"].set_transform(train_transforms, output_all_columns=False)
 
-    if training_args.do_eval:
-        if data_args.max_eval_samples is not None:
-            raw_datasets["eval"] = (
-                raw_datasets["eval"].shuffle(seed=training_args.seed).select(range(data_args.max_eval_samples))
-            )
-        # Set the validation transforms
-        raw_datasets["eval"].set_transform(val_transforms, output_all_columns=False)
+    if data_args.max_eval_samples is not None:
+        raw_datasets["eval"] = (
+            raw_datasets["eval"].shuffle(seed=training_args.seed).select(range(data_args.max_eval_samples))
+        )
+    # Set the validation transforms
+    raw_datasets["eval"].set_transform(val_transforms, output_all_columns=False)
 
     # Initialize our trainer
     trainer = Trainer(
         model=model,
         args=training_args,
-        train_dataset=raw_datasets["train"] if training_args.do_train else None,
-        eval_dataset=raw_datasets["eval"] if training_args.do_eval else None,
+        train_dataset=raw_datasets["train"],
+        eval_dataset=raw_datasets["eval"],
         compute_metrics=compute_metrics,
         tokenizer=feature_extractor,
     )
 
     # Training
-    if training_args.do_train:
-        print("Trained!")
-        checkpoint = None
-        if training_args.resume_from_checkpoint is not None:
-            checkpoint = training_args.resume_from_checkpoint
-        elif last_checkpoint is not None:
-            checkpoint = last_checkpoint
-        train_result = trainer.train(resume_from_checkpoint=checkpoint)
-        trainer.save_model()
-        trainer.log_metrics("train", train_result.metrics)
-        trainer.save_metrics("train", train_result.metrics)
-        trainer.save_state()
+    print("Trained!")
+    checkpoint = None
+    if training_args.resume_from_checkpoint is not None:
+        checkpoint = training_args.resume_from_checkpoint
+    elif last_checkpoint is not None:
+        checkpoint = last_checkpoint
+    train_result = trainer.train(resume_from_checkpoint=checkpoint)
+    trainer.save_model()
+    trainer.log_metrics("train", train_result.metrics)
+    trainer.save_metrics("train", train_result.metrics)
+    trainer.save_state()
 
     # Evaluation
-    if training_args.do_eval:
-        print("Evaluated!")
-        metrics = trainer.evaluate()
-        trainer.log_metrics("eval", metrics)
-        trainer.save_metrics("eval", metrics)
-        print(metrics)
+    print("Evaluated!")
+    metrics = trainer.evaluate()
+    trainer.log_metrics("eval", metrics)
+    trainer.save_metrics("eval", metrics)
+    print(metrics)
 
     # Write model card and (optionally) push to hub
     kwargs = {
