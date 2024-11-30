@@ -242,8 +242,8 @@ def main():
 
     # Initialize our dataset and prepare it for the audio classification task.
     raw_datasets = DatasetDict()
-    raw_datasets["train"] = load_dataset("chironzjy/audiotrain82")["train"]
-    raw_datasets["eval"] = load_dataset("chironzjy/audiotest28")["train"]
+    raw_datasets["train"] = load_dataset("chironzjy/audiotest28")["train"]
+    raw_datasets["eval"] = load_dataset("chironzjy/audiotrain82")["train"]
     print(raw_datasets)
 
     if data_args.audio_column_name not in raw_datasets["train"].column_names:
